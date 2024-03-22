@@ -13,7 +13,7 @@ public class App {
   private static Random rand = new Random();
   private static Scanner teclado = new Scanner(System.in);
   private static List<Aposta> lista = new LinkedList<>();
-  private static int MAIORNUMERO = 60;
+  private static int MAIORNUMERO = 50;
   private static int TAMANHODAAPOSTA = 5;
 
   public static void main(String[] args) {
@@ -125,6 +125,7 @@ public class App {
 
     while (cont < TAMANHODAAPOSTA) {
       int aleatorio = rand.nextInt(MAIORNUMERO);
+      aleatorio++;
 
       boolean existente = false;
 
@@ -136,14 +137,14 @@ public class App {
       }
 
       if (!existente) {
-        sorteio.add(aleatorio + 1);
+        sorteio.add(aleatorio);
         cont++;
       }
     }
 
     int maiorAcertos = 0;
 
-    while (maiorAcertos == 0) {
+    while (maiorAcertos < 5) {
       HashMap<Aposta, Integer> resultado = new LinkedHashMap<>();
 
       for (Aposta aposta : lista) {
@@ -162,16 +163,20 @@ public class App {
         }
       }
 
-      if (maiorAcertos == 0) {
+      imprimeSorteio(sorteio);
+
+      if (maiorAcertos < 5) {
         System.out.println("Não houve acertadores com " + sorteio.size() + ". Sorteando mais um número.");
         if (sorteio.size() == 25) {
           System.out.println("Não houve vencedores mesmo após 25 números sorteados;");
+          break;
         }
 
-        boolean existente = false;
-        while (!existente) {
+        while (true) {
           int aleatorio = rand.nextInt(MAIORNUMERO);
+          aleatorio++;
 
+          boolean existente = false;
           for (Integer item : sorteio) {
             if (aleatorio == item) {
               existente = true;
@@ -180,22 +185,12 @@ public class App {
           }
 
           if (!existente) {
-            sorteio.add(aleatorio + 1);
+            sorteio.add(aleatorio);
             break;
           }
         }
 
       } else {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Números sorteados: ");
-        Collections.sort(sorteio);
-        for (int i = 0; i < sorteio.size(); i++) {
-          sb.append(sorteio.get(i));
-          if (i + 1 < sorteio.size()) {
-            sb.append(", ");
-          }
-        }
-        System.out.println(sb.toString());
 
         for (Map.Entry<Aposta, Integer> entry : resultado.entrySet()) {
           if (entry.getValue() == maiorAcertos) {
@@ -205,6 +200,19 @@ public class App {
         }
       }
     }
+  }
+
+  private static void imprimeSorteio(List<Integer> sorteio) {
+    StringBuilder sb = new StringBuilder();
+    sb.append("Números sorteados: ");
+    Collections.sort(sorteio);
+    for (int i = 0; i < sorteio.size(); i++) {
+      sb.append(sorteio.get(i));
+      if (i + 1 < sorteio.size()) {
+        sb.append(", ");
+      }
+    }
+    System.out.println(sb.toString());
   }
 
 }

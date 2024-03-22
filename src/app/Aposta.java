@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Aposta {
-  public static int _codigo = 1;
+  public static int _codigo = 1000;
 
   private int codigo;
   public String nome;
